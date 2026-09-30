@@ -1,17 +1,17 @@
 {
   "2": {
-    "block_quant_error": 0.1234,
-    "static_quant_error": 0.4567,
-    "improvement": 73.0
+    "block_quant_error": 0.444489,
+    "static_quant_error": 0.722861,
+    "improvement_pct": 38.51
   },
   "4": {
-    "block_quant_error": 0.0456,
-    "static_quant_error": 0.1234,
-    "improvement": 63.0
+    "block_quant_error": 0.854713,
+    "static_quant_error": 0.882685,
+    "improvement_pct": 3.17
   },
   "8": {
-    "block_quant_error": 0.0023,
-    "static_quant_error": 0.0034,
-    "improvement": 32.4
+    "block_quant_error": 0.994142,
+    "static_quant_error": 0.993287,
+    "improvement_pct": -0.09
   }
 }
