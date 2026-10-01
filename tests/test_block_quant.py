@@ -75,7 +75,8 @@ def test_scales_trained():
     """Test that scales actually move during training."""
     q = BlockQuantizer(bit_width=4, block_size=8)
     x = torch.randn(128)
-    scales_before = q._scales.clone().detach() if q._scales is not None else 1
+    q(x)  # initialise scales from the data
+    scales_before = q._scales.clone().detach()
 
     # Train for a few steps
     opt = torch.optim.Adam([q._scales], lr=0.1)
@@ -95,3 +96,23 @@ def test_quantize_block_function():
     x = torch.randn(5, 16, 8)
     out, scales = quantize_block(x, bit_width=4, block_size=8)
     assert out.shape == x.shape
+
+def test_4bit_uses_15_levels_and_keeps_magnitude():
+    """Regression: an earlier version used 3 levels and shrank weights 7x."""
+    torch.manual_seed(0)
+    x = torch.randn(64) * 0.02
+    out, _ = quantize_block(x, bit_width=4, block_size=64)
+    assert torch.unique(out).numel() > 8
+    assert torch.allclose(out.abs().max(), x.abs().max(), rtol=1e-4)
+    rel = ((out - x).norm() / x.norm()).item()
+    assert rel < 0.15
+
+
+def test_search_scales_never_worse_than_absmax():
+    from block_quant import search_scales, quantize_with_scales
+    torch.manual_seed(0)
+    x = torch.randn(32, 256)
+    absmax_out, _ = quantize_block(x, 4, 64)
+    s = search_scales(x, 4, 64)
+    searched = quantize_with_scales(x, s, 4, 64)
+    assert ((searched - x) ** 2).sum() <= ((absmax_out - x) ** 2).sum() + 1e-6

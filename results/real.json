@@ -1,0 +1,30 @@
+{
+  "setup": {
+    "model": "Qwen3-8B",
+    "bits": 4,
+    "block": 64,
+    "layers": 252,
+    "eval": "WikiText-2 test, 40x512 tokens",
+    "calib": "WikiText-2 train, 8x512 tokens"
+  },
+  "fp16": {
+    "ppl": 12.0346,
+    "seconds": 13.4
+  },
+  "rtn_channel": {
+    "ppl": 16.4527,
+    "seconds": 10.7
+  },
+  "block_absmax": {
+    "ppl": 12.6132,
+    "seconds": 10.7
+  },
+  "block_mse": {
+    "ppl": 12.6628,
+    "seconds": 19.1
+  },
+  "block_act": {
+    "ppl": 12.2564,
+    "seconds": 21.0
+  }
+}

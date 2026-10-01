@@ -1,16 +1,15 @@
-# Block-Quant Real Results
+# Block-Quant: measured results
 
-**Status:** Negative result on Qwen3-8B: learned-scale block quantisation was worse than plain rounding (12.45 vs 9.38 perplexity, 4-bit, first 3 large linear layers).
+Qwen3-8B, 4-bit weights (levels -7..7), all 252 decoder linear layers, bf16 fake quantisation on an RTX 3090 Ti.
+Perplexity on WikiText-2 test, 40 x 512 tokens. Calibration for the activation-weighted method: WikiText-2 train, 8 x 512 tokens.
+Command: `python results/run_real.py` (writes `results/real.json`).
 
-Command: `python3 repos/block-quant/results/run_real.py`
+| Method | Perplexity |
+|---|---|
+| FP16 | 12.03 |
+| Per-channel round-to-nearest | 16.45 |
+| Block-64 absmax | 12.61 |
+| Block-64 MSE clip search | 12.66 |
+| Block-64 activation-weighted clip search | **12.26** |
 
-| Method | Bits | Perplexity |
-|--------|------|------------|
-| Baseline (round-to-nearest) | 4 | 9.38 |
-| Block quantization (learned scales) | 4 | 12.45 |
-
-Block quantization at 4-bit achieved 12.45 perplexity versus 9.38 for plain rounding. While the learned scales did not improve over naive rounding on this subset of layers, the method still provides a principled framework for post-training quantization. Further tuning of learning rate, block size, or optimisation steps may yield better results.
-
-Perplexity is measured on 3 short text prompts using Qwen3-8B with 4-bit
-quantization applied to the first 3 large linear layers.
-Lower is better.
+Earlier results in this file (3 prompts, first 3 layers) came from a quantiser bug that used 3 levels instead of 15; they are withdrawn. See the README for details.
