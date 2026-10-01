@@ -43,6 +43,10 @@ Block size 64, Adam lr=1e-3, 100 steps.
 
 The biggest gains come at 2-bit, where per-block scale tuning recovers structure that aggressive quantization destroys. At higher bit-widths the initial data-driven scales are already close to optimal.
 
+**Measured status:** Negative result on Qwen3-8B: learned-scale block quantisation was worse than plain rounding (12.45 vs 9.38 perplexity, 4-bit, first 3 large linear layers).
+
+See [RESULTS.md](RESULTS.md) for real perplexity comparisons.
+
 ```bash
 # Run the benchmark yourself
 python benchmark.py
